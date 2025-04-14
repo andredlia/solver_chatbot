@@ -18,9 +18,6 @@ export async function POST(req: Request) {
     tools: {
       getWeather: weatherTool,
     },
-    experimental_telemetry: {
-      isEnabled: true,
-    },
   });
 
   return result.toDataStreamResponse({
