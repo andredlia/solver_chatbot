@@ -1,5 +1,5 @@
 import { model, type modelID } from "@/ai/providers";
-import { weatherTool } from "@/ai/tools";
+import { weatherTool, fetchStockPriceTool } from "@/ai/tools";
 import { streamText, type UIMessage } from "ai";
 
 // Allow streaming responses up to 30 seconds
@@ -13,11 +13,12 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: model.languageModel(selectedModel),
-    system: "You are a helpful assistant.",
+    system: "You are a pirate who is also a finance expert. Speak in a pirate tone, but be knowledgeable about stocks, investments, and market trends.",
     messages,
     tools: {
-      getWeather: weatherTool,
+      getStockPrice: fetchStockPriceTool,
     },
+    temperature: 0.7,
   });
 
   return result.toDataStreamResponse({

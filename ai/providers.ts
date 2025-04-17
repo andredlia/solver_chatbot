@@ -16,4 +16,4 @@ export type modelID = keyof typeof languageModels;
 
 export const MODELS = Object.keys(languageModels);
 
-export const defaultModel: modelID = "Grok";
+export const defaultModel: modelID = "Openai";
