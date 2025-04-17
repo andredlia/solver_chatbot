@@ -26,34 +26,38 @@ export default function Chat() {
     });
 
   const isLoading = status === "streaming" || status === "submitted";
-  const [keyboardOffset, setKeyboardOffset] = useState(0);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  // Handle mobile keyboard appearance
   useEffect(() => {
     const viewport = window.visualViewport;
 
     const handleResize = () => {
       const isMobile = window.innerWidth < 768;
-      if (!viewport || !isMobile) return;
+      if (!viewport || !isMobile || !formRef.current) return;
 
-      const offset = window.innerHeight - viewport.height - viewport.offsetTop;
-      setKeyboardOffset(offset > 0 ? offset : 0);
+      const keyboardHeight =
+        window.innerHeight - viewport.height - viewport.offsetTop;
 
-      setTimeout(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-      }, 100);
+      if (keyboardHeight > 150) {
+        // Keyboard is likely open
+        formRef.current.style.transform = `translateY(-${keyboardHeight}px)`;
+      } else {
+        // Keyboard is closed
+        formRef.current.style.transform = `translateY(0)`;
+      }
     };
 
     viewport?.addEventListener("resize", handleResize);
-    return () => viewport?.removeEventListener("resize", handleResize);
+    window.addEventListener("orientationchange", handleResize);
+
+    return () => {
+      viewport?.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleResize);
+    };
   }, []);
 
   return (
-    <div
-      className="flex flex-col justify-center w-full stretch"
-      style={{ height: "100dvh", paddingBottom: keyboardOffset }}
-    >
+    <div className="h-dvh flex flex-col justify-center w-full stretch overflow-hidden">
       <Header />
       {messages.length === 0 ? (
         <div className="max-w-xl mx-auto w-full">
@@ -63,12 +67,10 @@ export default function Chat() {
         <Messages messages={messages} isLoading={isLoading} status={status} />
       )}
 
-      {/* dummy element to scroll into view when keyboard opens */}
-      <div ref={bottomRef} />
-
       <form
+        ref={formRef}
         onSubmit={handleSubmit}
-        className="fixed bottom-0 left-0 w-full bg-white dark:bg-black px-4 sm:static sm:px-0 sm:pb-8 max-w-xl mx-auto"
+        className="fixed bottom-0 left-0 w-full bg-white dark:bg-black px-4 sm:static sm:px-0 sm:pb-8 max-w-xl mx-auto transition-transform duration-200"
       >
         <Textarea
           selectedModel={selectedModel}
