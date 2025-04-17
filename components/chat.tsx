@@ -30,21 +30,20 @@ export default function Chat() {
   const isLoading = status === "streaming" || status === "submitted";
 
   return (
-    <div className="min-h-screen flex flex-col justify-between overflow-auto">
+    <div className="h-dvh flex flex-col justify-center w-full stretch">
       <Header />
-      <div className="flex-1 overflow-auto">
-        {messages.length === 0 ? (
-          <div className="max-w-xl mx-auto w-full">
-            <ProjectOverview />
-          </div>
-        ) : (
-          <Messages messages={messages} isLoading={isLoading} status={status} />
-        )}
-      </div>
+      {messages.length === 0 ? (
+        <div className="max-w-xl mx-auto w-full">
+          <ProjectOverview />
+        </div>
+      ) : (
+        <Messages messages={messages} isLoading={isLoading} status={status} />
+      )}
       <form
         onSubmit={handleSubmit}
-        className="pb-8 bg-white dark:bg-black w-full max-w-xl mx-auto px-4 sm:px-0"
+        className="bg-white dark:bg-black w-full max-w-xl mx-auto px-4 sm:px-0 pb-8"
       >
+
         <Textarea
           selectedModel={selectedModel}
           setSelectedModel={setSelectedModel}
