@@ -2,7 +2,7 @@
 
 import { defaultModel, type modelID } from "@/ai/providers";
 import { useChat } from "@ai-sdk/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Textarea } from "./textarea";
 import { ProjectOverview } from "./project-overview";
 import { Messages } from "./messages";
@@ -11,6 +11,8 @@ import { toast } from "sonner";
 
 export default function Chat() {
   const [selectedModel, setSelectedModel] = useState<modelID>(defaultModel);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
   const { messages, input, handleInputChange, handleSubmit, status, stop } =
     useChat({
       maxSteps: 5,
@@ -29,6 +31,21 @@ export default function Chat() {
 
   const isLoading = status === "streaming" || status === "submitted";
 
+  // Scroll to bottom on keyboard open (mobile only)
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth < 768;
+      if (isMobile) {
+        setTimeout(() => {
+          bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="h-dvh flex flex-col justify-center w-full stretch">
       <Header />
@@ -37,7 +54,10 @@ export default function Chat() {
           <ProjectOverview />
         </div>
       ) : (
-        <Messages messages={messages} isLoading={isLoading} status={status} />
+        <div className="flex-1 overflow-y-auto max-w-xl w-full mx-auto">
+          <Messages messages={messages} isLoading={isLoading} status={status} />
+          <div ref={bottomRef} />
+        </div>
       )}
       <form
         onSubmit={handleSubmit}
