@@ -29,6 +29,7 @@ export default function Chat() {
 
   const isLoading = status === "streaming" || status === "submitted";
   const messagesEndRef = useRef<HTMLDivElement>(null); // Reference to the bottom of the messages container
+  const inputRef = useRef<HTMLTextAreaElement>(null); // Ref for the textarea
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -59,6 +60,7 @@ export default function Chat() {
           isLoading={isLoading}
           status={status}
           stop={stop}
+          inputRef={inputRef} // Pass the ref here
         />
       </form>
     </div>

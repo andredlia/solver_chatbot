@@ -5,12 +5,13 @@ import { ModelPicker } from "./model-picker";
 
 interface InputProps {
   input: string;
-  handleInputChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void; // Corrected type here
+  handleInputChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   isLoading: boolean;
   status: string;
   stop: () => void;
   selectedModel: modelID;
   setSelectedModel: (model: modelID) => void;
+  inputRef: React.RefObject<HTMLTextAreaElement | null>; // Ref for textarea
 }
 
 export const Textarea = ({
@@ -21,21 +22,22 @@ export const Textarea = ({
   stop,
   selectedModel,
   setSelectedModel,
+  inputRef, // Destructure inputRef here
 }: InputProps) => {
   return (
     <div className="relative w-full pt-4">
       <ShadcnTextarea
+        ref={inputRef} // Correctly pass the ref here for textarea
         className="resize-none bg-secondary w-full rounded-2xl pr-12 pt-4 pb-16"
         value={input}
         autoFocus
-        placeholder={"Say something..."}
-        onChange={handleInputChange}  // Event handler should now work correctly
+        placeholder="Say something..."
+        onChange={handleInputChange}
         onKeyDown={(e) => {
           if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             if (input.trim() && !isLoading) {
-              // @ts-expect-error err
-              const form = e.target.closest("form");
+              const form = (e.target as HTMLElement).closest("form");
               if (form) form.requestSubmit();
             }
           }
