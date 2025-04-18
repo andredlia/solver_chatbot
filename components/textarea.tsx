@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
 import { modelID } from "@/ai/providers";
 import { Textarea as ShadcnTextarea } from "@/components/ui/textarea";
 import { ArrowUp } from "lucide-react";
 import { ModelPicker } from "./model-picker";
+import { useEffect, useRef } from "react";
 
 interface InputProps {
   input: string;
@@ -25,18 +25,18 @@ export const Textarea = ({
 }: InputProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // Scroll the textarea into view on focus
   useEffect(() => {
-    const el = textareaRef.current;
-    if (!el) return;
+    const textarea = textareaRef.current;
 
     const handleFocus = () => {
       setTimeout(() => {
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 300); // small delay to wait for keyboard
+        textarea?.scrollIntoView({ behavior: "smooth", block: "end" });
+      }, 300); // Delay to wait for keyboard to appear
     };
 
-    el.addEventListener("focus", handleFocus);
-    return () => el.removeEventListener("focus", handleFocus);
+    textarea?.addEventListener("focus", handleFocus);
+    return () => textarea?.removeEventListener("focus", handleFocus);
   }, []);
 
   return (
@@ -46,7 +46,7 @@ export const Textarea = ({
         className="resize-none bg-secondary w-full rounded-2xl pr-12 pt-4 pb-16"
         value={input}
         autoFocus
-        placeholder={"Say something..."}
+        placeholder="Say something..."
         // @ts-expect-error err
         onChange={handleInputChange}
         onKeyDown={(e) => {
