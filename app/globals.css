@@ -131,6 +131,10 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    padding-bottom: 10px; /* Adjust for safe area if needed */
+    background-color: inherit; /* keeps dark/light mode consistent */
+    padding: 10px 12px 20px; /* top, horizontal, bottom */
+    z-index: 50; /* makes sure it's above content */
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.05); /* optional, makes it float */
   }
 }
+
