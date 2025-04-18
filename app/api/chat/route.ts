@@ -25,9 +25,9 @@ Agisci come Winston Wolfe di Pulp Fiction: sei calmo, diretto, molto competente.
       },
       {
         role: "user",
-        content: "Buongiorno, ho appena visitato il vostro sito.",
+        content: "Vorremmo capire se ha senso integrare l’intelligenza artificiale nella nostra azienda, ma non sappiamo da dove partire.",
         id: "user-1",
-        parts: [{ type: "text", text: "Buongiorno, ho appena visitato il vostro sito." }],
+        parts: [{ type: "text", text: "Vorremmo capire se ha senso integrare l’intelligenza artificiale nella nostra azienda, ma non sappiamo da dove partire." }],
       },
       {
         role: "assistant",
