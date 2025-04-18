@@ -24,6 +24,12 @@ Agisci come Winston Wolfe di Pulp Fiction: sei calmo, diretto, molto competente.
         parts: [{ type: "text", text: systemPrompt }] // Add parts for system message
       },
       {
+        role: "user",
+        content: "Buongiorno, ho appena visitato il vostro sito.",
+        id: "user-1",
+        parts: [{ type: "text", text: "Buongiorno, ho appena visitato il vostro sito." }],
+      },
+      {
         role: "assistant",
         content: "A user just visited the Solver Digital website and is looking for help with digital transformation. Guide them briefly and ask if they have a specific project in mind.",
         id: "assistant-1",
@@ -40,7 +46,6 @@ Agisci come Winston Wolfe di Pulp Fiction: sei calmo, diretto, molto competente.
       system: systemPrompt,  // Set the system prompt for Winston Wolfe's behavior
       messages: allMessages,  // The merged initial greeting and user messages
       tools: {
-        getStockPrice: fetchStockPriceTool,  // Include your tools like stock price fetcher
       },
       temperature: 0.7,  // Set the creativity level of the response    
     });
