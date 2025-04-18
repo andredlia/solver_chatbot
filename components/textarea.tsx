@@ -42,7 +42,7 @@ export const Textarea = ({
   };
 
   return (
-    <div className="relative w-full pt-4">
+    <div className="relative w-full pt-4 mobile-bottom">
       <ShadcnTextarea
         ref={inputRef} // Correctly pass the ref here for textarea
         className="resize-none bg-secondary w-full rounded-2xl pr-12 pt-4 pb-16"
