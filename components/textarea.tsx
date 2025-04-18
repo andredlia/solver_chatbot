@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { modelID } from "@/ai/providers";
 import { Textarea as ShadcnTextarea } from "@/components/ui/textarea";
 import { ArrowUp } from "lucide-react";
@@ -22,9 +23,26 @@ export const Textarea = ({
   selectedModel,
   setSelectedModel,
 }: InputProps) => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+
+    const handleFocus = () => {
+      setTimeout(() => {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 300); // small delay to wait for keyboard
+    };
+
+    el.addEventListener("focus", handleFocus);
+    return () => el.removeEventListener("focus", handleFocus);
+  }, []);
+
   return (
     <div className="relative w-full pt-4">
       <ShadcnTextarea
+        ref={textareaRef}
         className="resize-none bg-secondary w-full rounded-2xl pr-12 pt-4 pb-16"
         value={input}
         autoFocus
@@ -42,6 +60,7 @@ export const Textarea = ({
           }
         }}
       />
+
       <ModelPicker
         setSelectedModel={setSelectedModel}
         selectedModel={selectedModel}
