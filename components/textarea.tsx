@@ -11,7 +11,7 @@ interface InputProps {
   stop: () => void;
   selectedModel: modelID;
   setSelectedModel: (model: modelID) => void;
-  inputRef: React.RefObject<HTMLTextAreaElement | null>; // Ref for textarea
+  inputRef: React.RefObject<HTMLTextAreaElement | null>;
 }
 
 export const Textarea = ({
@@ -22,8 +22,25 @@ export const Textarea = ({
   stop,
   selectedModel,
   setSelectedModel,
-  inputRef, // Destructure inputRef here
+  inputRef,
 }: InputProps) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault(); // Prevent the default action (e.g., form submission)
+      
+      if (input.trim() && !isLoading) {
+        // Optionally, submit the form here
+        const form = (e.target as HTMLElement).closest("form");
+        if (form) form.requestSubmit();
+      }
+      
+      // Close the mobile keyboard by blurring the textarea
+      if (inputRef.current) {
+        inputRef.current.blur();  // Blur the textarea to close the keyboard
+      }
+    }
+  };
+
   return (
     <div className="relative w-full pt-4">
       <ShadcnTextarea
@@ -33,15 +50,7 @@ export const Textarea = ({
         autoFocus
         placeholder="Say something..."
         onChange={handleInputChange}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            if (input.trim() && !isLoading) {
-              const form = (e.target as HTMLElement).closest("form");
-              if (form) form.requestSubmit();
-            }
-          }
-        }}
+        onKeyDown={handleKeyDown} // Use the custom handler here
       />
       <ModelPicker
         setSelectedModel={setSelectedModel}
