@@ -2,11 +2,10 @@ import { modelID } from "@/ai/providers";
 import { Textarea as ShadcnTextarea } from "@/components/ui/textarea";
 import { ArrowUp } from "lucide-react";
 import { ModelPicker } from "./model-picker";
-import { useEffect, useRef } from "react";
 
 interface InputProps {
   input: string;
-  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleInputChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void; // Corrected type here
   isLoading: boolean;
   status: string;
   stop: () => void;
@@ -23,32 +22,14 @@ export const Textarea = ({
   selectedModel,
   setSelectedModel,
 }: InputProps) => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  // Scroll the textarea into view on focus
-  useEffect(() => {
-    const textarea = textareaRef.current;
-
-    const handleFocus = () => {
-      setTimeout(() => {
-        textarea?.scrollIntoView({ behavior: "smooth", block: "end" });
-      }, 300); // Delay to wait for keyboard to appear
-    };
-
-    textarea?.addEventListener("focus", handleFocus);
-    return () => textarea?.removeEventListener("focus", handleFocus);
-  }, []);
-
   return (
     <div className="relative w-full pt-4">
       <ShadcnTextarea
-        ref={textareaRef}
         className="resize-none bg-secondary w-full rounded-2xl pr-12 pt-4 pb-16"
         value={input}
         autoFocus
-        placeholder="Say something..."
-        // @ts-expect-error err
-        onChange={handleInputChange}
+        placeholder={"Say something..."}
+        onChange={handleInputChange}  // Event handler should now work correctly
         onKeyDown={(e) => {
           if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
@@ -60,7 +41,6 @@ export const Textarea = ({
           }
         }}
       />
-
       <ModelPicker
         setSelectedModel={setSelectedModel}
         selectedModel={selectedModel}
